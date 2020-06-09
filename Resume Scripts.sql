@@ -136,3 +136,27 @@ _measure FILTER tabela = CALCULATE(COUNT(Principal[id]),
 FILTER(Principal,
 max(Principal[start_date]) <= MAX(DateDim[Date]) && max(Principal[start_date]) >= MIN(DateDim[Date]) ||
 max(Principal[finish_date]) <= MAX(DateDim[Date]) && max(Principal[finish_date]) >= MIN(DateDim[Date])))
+												
+												----------- USING MORE THAN 2 DATES -----------------------
+
+old_Forecast - Outstanding PO's = CALCULATE(SUM(Fact_job_cost_master[Forecast - Outstanding PO's]),
+FILTER(Fact_job_cost_master,
+Fact_job_cost_master[jcm_start_date] <= MAX(Dim_Calendar[Date]) && Fact_job_cost_master[jcm_start_date] >= MIN(Dim_Calendar[Date]) || Fact_job_cost_master[finish_date] <= MAX(Dim_Calendar[Date]) && Fact_job_cost_master[finish_date] >= MIN(Dim_Calendar[Date])))
+
+
+
+MaxMonth = CALCULATE(MAX'Calendar'[MonthNumb]), (ALL('Calendar'), 'Calendar'[CurMonthOffset] = 0)
+
+Sales Across Prior Years, = VAR MaxMonth = [MaxMonth]
+RETURN CALCULATE ([sales], 'Calendar'[MonthNum]) <= MaxMonth)
+
+
+
+--TREATAS-- (cross join, filter, creating virtual relationship and aggretation)
+Measure = 
+CALCULATE(SUM('Tax Values'[standard_tax]),
+ TREATAS( SUMMARIZE( 'Pay Values', 'Pay Values'[Employee no],'Pay Values'[Pay Date]),
+'Tax Values'[employee_no_],
+'Tax Values'[pay_date]))
+								
+												
