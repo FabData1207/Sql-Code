@@ -1,6 +1,32 @@
 --SQL
+---Show the highest sale for each territory and day of the week following by product name
+SELECT 
+		 DayOfWeek,
+		 Country,
+		 MAX(t1.TotalSales) as TotalSales
+FROM
+(
+SELECT 
+		d.EnglishDayNameOfWeek as DayOfWeek,
+		t.SalesTerritoryCountry as Country,
+		p.EnglishProductName as ProductName,
+		SUM(s.SalesAmount) as TotalSales
+	FROM dbo.FactInternetSales s
+	JOIN DimSalesTerritory as t
+	ON s.SalesTerritoryKey = t.SalesTerritoryKey
+	JOIN Dimdate d
+	ON s.OrderDateKey = d.DateKey
+	JOIN DimProduct as p
+	ON s.ProductKey = p.ProductKey
+GROUP BY t.SalesTerritoryCountry, d.EnglishDayNameOfWeek, d.DayNumberOfWeek, p.EnglishProductName
+HAVING SUM(s.SalesAmount) > = 0
+) as t1
+GROUP BY DayOfWeek, Country
+ORDER BY 2 DESC
+
 
 --- SQL SUB QUERIES -- Getting the total value for the year and if the year is 2010 also counting how many products for each of these categories
+
 SELECT T1.is_bigger2010, SUM(t1.Total_Price) AS TOTAL_PRICE, COUNT(DATE) 
 FROM
 (
