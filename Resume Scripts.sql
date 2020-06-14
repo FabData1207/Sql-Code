@@ -1,7 +1,19 @@
 --SQL
 
+--- SQL SUB QUERIES -- Getting the total value for the year and if the year is 2010 also counting how many products for each of these categories
+SELECT T1.is_bigger2010, SUM(t1.Total_Price) AS TOTAL_PRICE, COUNT(DATE) 
+FROM
+(
+SELECT DATEPART(year, OrderDate) as Date,
+	   SUM(UnitPrice) AS Total_Price,
+	   CASE WHEN OrderDate > = '2011' then 'Yes' else 'No' END AS is_bigger2010
+	FROM dbo.FactInternetSales
+GROUP BY OrderDate 
+HAVING SUM(UnitPrice) > = 3500
+) AS T1
+GROUP BY is_bigger2010
 
--- Creating a table with Category Type and category code from 2 differents tables.
+-- Selecting table with Category Type and category code from 2 differents tables.
 
 SELECT
   DISTINCT job_cost_categories.JCC_TYPE AS Project_Category_Type_Code,
