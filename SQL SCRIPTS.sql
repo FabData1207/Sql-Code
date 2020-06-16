@@ -1,5 +1,5 @@
 --SQL
----Show the highest sale for each territory and day of the week following by product name
+---SQL SUBQUERIES - Show the highest sale for each territory and day of the week following by product name
 SELECT 
 		 DayOfWeek,
 		 Country,
@@ -168,9 +168,9 @@ ORDER BY 1
 Invoiced Revenue test = CALCULATE(SUM(fact_jcm[Actual invoiced Revenue]), USERELATIONSHIP(fact_jcm[finish_date], 'Calendar'[Date]))
 Revised CV = Revised CV = CALCULATE(SUM(Fact_job_cost_master[Revised Contract Value ]), USERELATIONSHIP(Dim_Calendar[Date],Fact_job_cost_master[finish_date]))
 
--- Using one key metric to filter another two differfent dates by Field.
+-- Using one key metric to filter other two differfent dates by Field.
 
-_measure FILTER tabela = CALCULATE(COUNT(Principal[id]),
+_measure FILTER = CALCULATE(COUNT(Principal[id]),
 FILTER(Principal,
 max(Principal[start_date]) <= MAX(DateDim[Date]) && max(Principal[start_date]) >= MIN(DateDim[Date]) ||
 max(Principal[finish_date]) <= MAX(DateDim[Date]) && max(Principal[finish_date]) >= MIN(DateDim[Date])))
